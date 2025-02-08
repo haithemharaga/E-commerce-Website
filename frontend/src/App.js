@@ -1,35 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Card, Row, Col, Container } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import NavigationBar from './components/Navbar';
+import ProductList from './components/ProductList';
+import Cart from './components/Cart';
+import './App.css';
 
-const ProductList = () => {
-  const [products, setProducts] = useState([]);
+function App() {
+  const [cartItems, setCartItems] = useState([]);
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/products')
-      .then(response => setProducts(response.data))
-      .catch(err => console.log(err));
-  }, []);
+  const addToCart = (product) => {
+    setCartItems([...cartItems, product]);
+  };
 
   return (
-    <Container>
-      <h1 className="text-center my-4">Products</h1>
-      <Row>
-        {products.map(product => (
-          <Col key={product._id} md={4} className="mb-4">
-            <Card>
-              <Card.Img variant="top" src={product.image} alt={product.name} style={{ height: '200px', objectFit: 'cover' }} />
-              <Card.Body>
-                <Card.Title>{product.name}</Card.Title>
-                <Card.Text>{product.description}</Card.Text>
-                <Card.Text>${product.price}</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-    </Container>
+    <Router>
+      <NavigationBar />
+      <Container className="mt-4">
+        <Routes>
+          <Route path="/" element={<ProductList addToCart={addToCart} />} />
+          <Route path="/cart" element={<Cart cartItems={cartItems} />} />
+        </Routes>
+      </Container>
+    </Router>
   );
-};
+}
 
-export default ProductList;
+export default App;
