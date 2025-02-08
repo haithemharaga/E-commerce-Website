@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Card, Row, Col, Container } from 'react-bootstrap';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -11,19 +12,23 @@ const ProductList = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Products</h1>
-      <ul>
+    <Container>
+      <h1 className="text-center my-4">Products</h1>
+      <Row>
         {products.map(product => (
-          <li key={product._id}>
-            <h2>{product.name}</h2>
-            <p>{product.description}</p>
-            <p>${product.price}</p>
-            <img src={product.image} alt={product.name} width="100" />
-          </li>
+          <Col key={product._id} md={4} className="mb-4">
+            <Card>
+              <Card.Img variant="top" src={product.image} alt={product.name} style={{ height: '200px', objectFit: 'cover' }} />
+              <Card.Body>
+                <Card.Title>{product.name}</Card.Title>
+                <Card.Text>{product.description}</Card.Text>
+                <Card.Text>${product.price}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
         ))}
-      </ul>
-    </div>
+      </Row>
+    </Container>
   );
 };
 
